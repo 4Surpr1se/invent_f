@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table {
+  font-family: arial, sans-serif;
+  border-collapse: separate;
+  width: 280%; <!--TODO переделать таблицу и параметры блока под нее, чтобы не юзать 200% -->
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+p {
+    text-align: right;
+}
+
+#createform{
+    text-align: right;
+}
+
+#searchfield{
+    float: left;
+
+}
+
+#block1 {
+    float: left;
+    display: block;
+    block-size: 200%;
+
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+    </style>
+        <meta charset="UTF-8">
+        <title>title</title>
+    <div id="searchfield">
+   <p><input type="search" name="q" placeholder="Поиск по сайту">
+   <input type="submit" value="Найти"></p>
+
+
+    <div id="block1">
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Адрес</th>
+            <th>Холдинг</th>
+        </tr>
+        {% for organization in organizations %}
+        <tr>
+            <th>{{organization.name}}</th>
+            <th>{{organization.address}}</th>
+            <th>{{organization.holding}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+        </div>
+
+    <form action="http://127.0.0.1:8000/organization/create/" method="POST", id="createform">
+  <div>
+    <label for="name">Название</label>
+    <input name="name" id="name"/>
+  </div>
+  <div>
+    <label for="address">Адрес</label>
+    <input name="address" id="address" />
+  </div>
+  <div>
+    <select name="holding">
+        {% for hold in holdings %}
+        <option>{{hold.name}}</option>
+        {% endfor %}
+    </select>
+  </div>
+  <div>
+    <button>Добавить организацию</button>
+  </div>
+</form>
+</head>
+<body>
+
+</body>
+</html>
