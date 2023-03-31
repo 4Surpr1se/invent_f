@@ -11,6 +11,7 @@ class Holding(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=255)
+    # TODO везде verbose_name='Имя' поменять на "Название" или что-то подобное
     address = models.CharField(verbose_name='Адрес', max_length=255)
     holding = models.ForeignKey(Holding, verbose_name="холдинг", on_delete=models.PROTECT)
 

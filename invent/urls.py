@@ -18,11 +18,19 @@ from django.urls import path
 from rest_framework import routers
 
 from core import views
-from core.views import OrganizationRetrieve, OrganizationList, OrganizationCreate
+from core.views import OrganizationRetrieve, OrganizationList, OrganizationCreate, DepartmentRetrieve, DepartmentList, \
+    DepartmentCreate, HoldingRetrieve, HoldingList, HoldingCreate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('organization/<pk>', OrganizationRetrieve.as_view()),
     path('organization/', OrganizationList.as_view()),
-    path('organization/create/', OrganizationCreate.as_view())
+    path('organization/create/', OrganizationCreate.as_view()),
+    path('department/<pk>', DepartmentRetrieve.as_view()),
+    path('department/', DepartmentList.as_view()),
+    path('department/create/', DepartmentCreate.as_view()),
+    path('holding/<pk>', HoldingRetrieve.as_view()),
+    path('holding/', HoldingList.as_view()),
+    path('holding/create/', HoldingCreate.as_view())
 ]
+
