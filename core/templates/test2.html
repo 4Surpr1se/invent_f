@@ -1,51 +1,45 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <style>
-
-body, html {
-  margin: 0px;
-  font-family: sans-serif;
-}
-
-.container {
-  display: flex;
-  gap: 0.625%;
-}
-
-a {
-  flex: 1;
-  text-decoration: none;
-  outline: none;
-  text-align: center;
-  line-height: 3;
-  color: black;
-}
-
-a:link,
-a:visited,
-a:focus {
-  background: palegoldenrod;
-  color: black;
-}
-
-a:hover {
-  background: orange;
-}
-
-a:active {
-  background: darkred;
-  color: white;
-}
-    </style>
-  </head>
-  <body>
-    <nav class="container">
-  <a href="#">Home</a>
-  <a href="#">Pizza</a>
-  <a href="#">Music</a>
-  <a href="#">Wombats</a>
-  <a href="#">Finland</a>
-    </nav>
-  </body>
-</html>
+<form action="http://127.0.0.1:8000/organization/">
+  <fieldset>
+    <legend>Choose your interests</legend>
+    <div>
+      <label>
+        <input type="checkbox" id="coding" name="interest" value="coding" />
+        Coding
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" id="music" name="interest" value="music" />
+        Music
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" id="art" name="interest" value="art" />
+        Art
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" id="sports" name="interest" value="sports" />
+        Sports
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" id="cooking" name="interest" value="cooking" />
+        Cooking
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" id="other" name="interest" value="other" />
+        Other
+      </label>
+      <input type="text" id="otherValue" name="other" aria-label="Other interest" />
+    </div>
+    <div>
+      <button type="submit">Submit form</button>
+    </div>
+  </fieldset>
+</form>

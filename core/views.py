@@ -25,16 +25,17 @@ class OrganizationRetrieve(RetrieveAPIView):
 
 
 class OrganizationList(ListAPIView):
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.filter(is_deleted=False)
     model = Organization
     serializer_class = OrganizationSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
     def list(self, request, *args, **kwargs):
         if query_name := request.query_params.get('search'):
-            queryset = Organization.objects.filter(name__contains=query_name)  # TODO МБ ПОЛУЧШЕ РЕШЕНИЕ ЕСТЬ
+            print(self.get_queryset().filter(is_deleted=True))
+            queryset = self.get_queryset().filter(name__contains=query_name)  # TODO МБ ПОЛУЧШЕ РЕШЕНИЕ ЕСТЬ
         else:
-            queryset = Organization.objects.all()
+            queryset = self.get_queryset()
         holding_queryset = Holding.objects.all()  # TODO мб придется переделывать,/
                                                   # TODO потому что 2 кверисета в одной вьюшке такое себе,/
                                                   # TODO либо не все поля возвращать
@@ -57,6 +58,17 @@ class OrganizationCreate(CreateAPIView):
             return redirect("http://127.0.0.1:8000/organization/?success_create=True")
         else:
             return organization
+
+
+class OrganizationDelete(CreateAPIView):
+    model = Organization
+    serializer_class = OrganizationSerializer
+
+    def post(self, request, *args, **kwargs):
+        [setattr(i, 'is_deleted', True) for i in Organization.objects.filter(pk__in=request.data.keys())]
+        print(Organization.objects.filter(pk__in=request.data.keys()))
+        print(Organization.objects.filter(is_deleted=True))
+        return Response(request.data)
 
 
 # class OrganizationDelete(DestroyAPIView):

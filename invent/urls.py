@@ -19,7 +19,7 @@ from rest_framework import routers
 
 from core import views
 from core.views import OrganizationRetrieve, OrganizationList, OrganizationCreate, DepartmentRetrieve, DepartmentList, \
-    DepartmentCreate, HoldingRetrieve, HoldingList, HoldingCreate
+    DepartmentCreate, HoldingRetrieve, HoldingList, HoldingCreate, OrganizationDelete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,7 @@ urlpatterns = [
     path('department/create/', DepartmentCreate.as_view()),
     path('holding/<pk>', HoldingRetrieve.as_view()),
     path('holding/', HoldingList.as_view()),
-    path('holding/create/', HoldingCreate.as_view())
+    path('holding/create/', HoldingCreate.as_view()),
+    path('organization/delete/', OrganizationDelete.as_view())
 ]
 

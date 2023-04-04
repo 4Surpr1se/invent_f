@@ -88,7 +88,7 @@ p {
 #searchfield{
     float: left;
     /*width: 17%;*/
-    padding: 0.25%;
+<!--    padding: 0.25%;-->
     /*block-size: auto;*/
 }
 
@@ -283,13 +283,15 @@ nav ul ul {
     </nav>
     </div>
 
-    <form action="" style="width: 30%; height: 30%">
-   <p><input type="search" name="search" id="searchfield" placeholder="Поиск по названию">
-   <input type="submit" style="" value="Найти"><button onclick="show()">Режим редактирования</button></p>
+    <form action="" style="height:">
+   <p style="height: 30px"><input type="search" name="search" id="searchfield" placeholder="Поиск по названию">
+   <input type="submit" style="float: left" value="Найти">
         </form>
+    <button style="
+    width: 120px;
+    height: 40px;" onclick="show()">Режим редактирования</button></p>
 
-
-
+    <form action="./delete/" method="POST">
     <div id="block1">
     <table>
 
@@ -305,10 +307,14 @@ nav ul ul {
             <th><a class = "btn" onclick=handleClick(this) style="color: black" href='../department/?organization_id={{organization.pk}}'><span>{{organization.name}}</span></a></th>
             <th>{{organization.address}}</th>
             <th><a class = "btn" onclick=handleClick(this) style="color: black" href='../holding/{{organization.holding.pk}}'><span>{{organization.holding}}</span></a></th>
-            <div ><th style = 'visibility: hidden' class="dip"><input style="text-align: center; width: 20px; height: 20px; align-content: center; align-self: center" type="checkbox"></th></div>
+            <div><th style = 'visibility: hidden' class="dip"><input style="text-align: center; width: 20px; height: 20px; align-content: center; align-self: center" name="{{organization.pk}}" id="{{organization.pk}}" type="checkbox"></th></div>
         </tr>
         {% endfor %}
-        <script>
+    <button style="padding: 3%">Добавить DSA</button>
+    </table>
+        </div>
+        </form>
+    <script>
             function show() {
          const a = Array.from(document.getElementsByClassName('dip'))
                 a.forEach(a => {
@@ -317,9 +323,6 @@ nav ul ul {
 
       }
         </script>
-    </table>
-
-        </div>
 
     <div id="createform">
     <form action="create/?redirect_back=True" method="POST" >

@@ -25,6 +25,10 @@ class OrganizationCreateSerializer(serializers.ModelSerializer):
         return organization
 
 
+class OrganizationDeleteSerializer(serializers.ModelSerializer):
+    pass
+
+
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department

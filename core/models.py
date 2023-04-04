@@ -1,5 +1,5 @@
 from django.db import models
-
+# TODO Добавить миксин под все модели
 
 class Holding(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=255, unique=True)
@@ -14,6 +14,7 @@ class Organization(models.Model):
     # TODO везде verbose_name='Имя' поменять на "Название" или что-то подобное
     address = models.CharField(verbose_name='Адрес', max_length=255)
     holding = models.ForeignKey(Holding, verbose_name="холдинг", on_delete=models.PROTECT)
+    is_deleted = models.BooleanField(verbose_name='Удален', default=False)
 
     def __str__(self):
         return self.name
