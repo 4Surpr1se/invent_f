@@ -65,10 +65,15 @@ class OrganizationDelete(CreateAPIView):
     serializer_class = OrganizationSerializer
 
     def post(self, request, *args, **kwargs):
-        [setattr(i, 'is_deleted', True) for i in Organization.objects.filter(pk__in=request.data.keys())]
-        print(Organization.objects.filter(pk__in=request.data.keys()))
-        print(Organization.objects.filter(is_deleted=True))
-        return Response(request.data)
+        # map(lambda i:  setattr(i, 'is_deleted', True), [i for i in Organization.objects.filter(pk__in=request.data.keys())])
+        # TODO Сделать через map как строкой выше
+        for i in Organization.objects.filter(pk__in=request.data.keys()):
+            i.is_deleted = True
+            i.save()
+        if request.META.get('HTTP_REFERER').split('?')[0] == 'http://127.0.0.1:8000/organization/':  # TODO убрать отношение к МЕТА данным
+            return redirect("http://127.0.0.1:8000/organization/?success_update=True")
+        else:
+            return Response(request.data)
 
 
 # class OrganizationDelete(DestroyAPIView):

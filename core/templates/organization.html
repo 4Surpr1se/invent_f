@@ -292,7 +292,9 @@ nav ul ul {
     height: 40px;" onclick="show()">Режим редактирования</button></p>
 
     <form action="./delete/" method="POST">
+
     <div id="block1">
+        <button style = 'visibility: hidden' class="dip">Сохранить Изменения</button>
     <table>
 
             <th>id</th>
@@ -300,17 +302,19 @@ nav ul ul {
             <th>Адрес</th>
             <th>Холдинг</th>
             <th style="color: red; visibility: hidden" class="dip">Удалить</th>
+            <th style="color: red; visibility: hidden" class="dip">Изменить</th>
         </tr>
         {% for organization in organizations %}
         <tr>
             <th><a class = "btn" onclick=handleClick(this) style="color: black" href='../department/?organization_id={{organization.pk}}'><span>{{organization.pk}}</span></a></th>
-            <th><a class = "btn" onclick=handleClick(this) style="color: black" href='../department/?organization_id={{organization.pk}}'><span>{{organization.name}}</span></a></th>
-            <th>{{organization.address}}</th>
-            <th><a class = "btn" onclick=handleClick(this) style="color: black" href='../holding/{{organization.holding.pk}}'><span>{{organization.holding}}</span></a></th>
-            <div><th style = 'visibility: hidden' class="dip"><input style="text-align: center; width: 20px; height: 20px; align-content: center; align-self: center" name="{{organization.pk}}" id="{{organization.pk}}" type="checkbox"></th></div>
+            <th><a class = "btn {{organization.pk}}" onclick=handleClick(this) style="color: black" href='../department/?organization_id={{organization.pk}}'><span>{{organization.name}}</span></a></th>
+            <th><a class = "{{organization.pk}}">{{organization.address}}</a></th>
+            <th><a class = "btn {{organization.pk}}" onclick=handleClick(this) style="color: black" href='../holding/{{organization.holding.pk}}'><span>{{organization.holding}}</span></a></th>
+            <th style = 'visibility: hidden; width: 80px; height: 38px; text-align: center' class="dip"><input style="text-align: center; width: 20px; height: 20px; align-content: center; align-self: center" name="{{organization.pk}}" id="{{organization.pk}}" type="checkbox"></th>
+            <th style='visibility: hidden; text-align: center' class="dip"><input type="button" onclick="editable_field(this, '{{organization.pk}}')" value="Изменить"></th>
         </tr>
         {% endfor %}
-    <button style="padding: 3%">Добавить DSA</button>
+
     </table>
         </div>
         </form>
@@ -318,10 +322,72 @@ nav ul ul {
             function show() {
          const a = Array.from(document.getElementsByClassName('dip'))
                 a.forEach(a => {
-  a.style.visibility = 'visible'
-});
+  a.style.visibility = 'visible'})
+}
+            function editable_field(from, el) {
+                // from.style.color = 'black'
+                // from.value = 'Подтвердить'
+                // from.onclick.disabled = true
+                var confirm_button = document.createElement("input")
+                confirm_button.type = 'button'
+                confirm_button.value = 'Подтвердить'
+                confirm_button.setAttribute('onclick', `SubmitChanges(${el})`)
 
-      }
+
+                var cancel_button = document.createElement("input")
+                cancel_button.type = 'button'
+                cancel_button.value = 'Отменить'
+                cancel_button.setAttribute('onclick', `DiscardChanges(${el})`)
+
+
+                // from.innerHTML = confirm_button.innerHTML
+
+
+
+                from.parentNode.replaceChildren(confirm_button, from)
+                from.style.visibility = 'hidden'
+                insertAfter(confirm_button, cancel_button)
+
+                for (let step = 0; step < 4; step++){
+                var e = document.getElementsByClassName(el)[0];
+
+
+                var d = document.createElement('input');
+                d.type = 'text'
+                d.innerHTML = e.innerHTML
+                d.value = e.textContent;
+                d.placeholder = e.textContent;
+                d.className = el + 'textfield'
+
+                e.parentNode.replaceChild(d, e);
+                }
+
+
+
+            }
+
+            function DiscardChanges(classname){
+                for (let step = 0; step < 4; step++){
+                    var d = document.getElementsByClassName(classname+'textfield')[0];
+                    var e = document.createElement('a');
+                    e.className = "btn " + classname
+                    e.setAttribute('onclick', 'handleClick(this)')
+                    e.style.color = 'black'
+                    e.textContent = d.placeholder
+                    // TODO доделать href
+                    d.parentNode.replaceChild(e, d);
+            }}
+
+            function None(button){
+                button.onclick.disabled = true
+            }
+
+            function insertAfter(referenceNode, newNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+
+
         </script>
 
     <div id="createform">
