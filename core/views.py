@@ -1,9 +1,11 @@
+import json
+
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import filters
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -76,6 +78,22 @@ class OrganizationDelete(CreateAPIView):
             return Response(request.data)
 
 
+class OrganizationUpdate(CreateAPIView):
+    model = Organization
+    serializer_class = OrganizationSerializer
+
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        for organization_line in request.data:
+            obj = Organization.objects.get(pk=organization_line['id'])
+            obj.name = organization_line['name']
+            obj.address = organization_line['address']
+            # obj.holding = organization_line['holding']
+
+            obj.save()
+        print(request.data)
+        print(1)
+        return Response(request.data)
 # class OrganizationDelete(DestroyAPIView):
 #     def delete(self, request, *args, **kwargs):
 #         if request:

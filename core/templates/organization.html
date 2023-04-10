@@ -12,6 +12,7 @@
   padding: 10px;
   /*border: 1px solid #ccc;*/
   cursor: pointer;
+  height: 26px;
 }
 
 .btn:hover {
@@ -27,7 +28,8 @@
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 2px;
+  height: 40px;
+<!--  padding: 2px;-->
 }
 p {
     text-align: right;
@@ -291,18 +293,18 @@ nav ul ul {
     width: 120px;
     height: 40px;" onclick="show()">Режим редактирования</button></p>
 
-    <form action="./delete/" method="POST">
+<!--    <form action="./delete/" method="POST">-->
 
     <div id="block1">
-        <button style = 'visibility: hidden' class="dip">Сохранить Изменения</button>
+        <button onclick = "SaveChanges()" style = 'visibility: hidden' class="dip">Сохранить Изменения</button>
     <table>
 
-            <th>id</th>
-            <th>Название</th>
+            <th style="width: 40px">id</th>
+            <th style="width: 200px">Название</th>
             <th>Адрес</th>
             <th>Холдинг</th>
             <th style="color: red; visibility: hidden" class="dip">Удалить</th>
-            <th style="color: red; visibility: hidden" class="dip">Изменить</th>
+            <th style="color: red; visibility: hidden; width: 200px" class="dip">Изменить</th>
         </tr>
         {% for organization in organizations %}
         <tr>
@@ -319,6 +321,8 @@ nav ul ul {
         </div>
         </form>
     <script>
+    var submit = []
+
             function show() {
          const a = Array.from(document.getElementsByClassName('dip'))
                 a.forEach(a => {
@@ -328,17 +332,21 @@ nav ul ul {
                 // from.style.color = 'black'
                 // from.value = 'Подтвердить'
                 // from.onclick.disabled = true
+                from.id = el + 'changebutton'
                 var confirm_button = document.createElement("input")
                 confirm_button.type = 'button'
                 confirm_button.value = 'Подтвердить'
-                confirm_button.setAttribute('onclick', `SubmitChanges(${el})`)
+                confirm_button.setAttribute('onclick', `SubmitChanges('${el}')`)
+
+                confirm_button.className = el + 'can_con'
 
 
                 var cancel_button = document.createElement("input")
                 cancel_button.type = 'button'
                 cancel_button.value = 'Отменить'
-                cancel_button.setAttribute('onclick', `DiscardChanges(${el})`)
+                cancel_button.setAttribute('onclick', `DiscardChanges('${el}')`)
 
+                cancel_button.className = el + 'can_con'
 
                 // from.innerHTML = confirm_button.innerHTML
 
@@ -348,7 +356,7 @@ nav ul ul {
                 from.style.visibility = 'hidden'
                 insertAfter(confirm_button, cancel_button)
 
-                for (let step = 0; step < 4; step++){
+                for (let step = 0; step < 3; step++){
                 var e = document.getElementsByClassName(el)[0];
 
 
@@ -366,8 +374,22 @@ nav ul ul {
 
             }
 
+            function ChangeButtonReturn(el){
+                var from = document.getElementById(el + 'changebutton')
+                from.style.visibility = 'visible'
+                var d = el + 'can_con'
+                // window.alert(d)
+                const can_con = Array.from(document.getElementsByClassName(d));
+                can_con.forEach(box => {
+                    box.remove();
+});
+                // can_con[0].remove()
+                // can_con[1].remove()
+            }
+
             function DiscardChanges(classname){
-                for (let step = 0; step < 4; step++){
+
+                for (let step = 0; step < 3; step++){
                     var d = document.getElementsByClassName(classname+'textfield')[0];
                     var e = document.createElement('a');
                     e.className = "btn " + classname
@@ -376,7 +398,51 @@ nav ul ul {
                     e.textContent = d.placeholder
                     // TODO доделать href
                     d.parentNode.replaceChild(e, d);
-            }}
+                }
+                    ChangeButtonReturn(classname);
+                }
+
+
+            function SubmitChanges(el){
+                // var dict = new Map()
+
+                    var element = document.getElementsByClassName(el+'textfield');
+
+                    const dict = {'id': el,
+                        name: element[0].value,
+                        address: element[1].value,
+                        holding: element[2].value
+                    }
+                    submit.push(dict)
+                    // window.alert(submit[0].get('name'))
+
+                for (let step = 0; step < 3; step++){
+                    var d = document.getElementsByClassName(el+'textfield')[0];
+                    var e = document.createElement('a');
+                    e.className = "btn " + el
+                    e.setAttribute('onclick', 'handleClick(this)')
+                    e.style.color = 'black'
+                    e.textContent = d.value
+                    // TODO доделать href
+                    d.parentNode.replaceChild(e, d);
+                }
+                    ChangeButtonReturn(el);
+                }
+
+
+
+                    // document.write(submit.get('name'), submit.get('address'), submit.get('holding'));
+
+
+
+            function SaveChanges(){
+            // window.alert(submit)
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", 'http://127.0.0.1:8000/organization/update/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(submit));
+            }
 
             function None(button){
                 button.onclick.disabled = true
